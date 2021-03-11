@@ -2,6 +2,7 @@
  LoyaltyPoints Service Project
  
  Usage: 
+    
     POST /transaction                       Transaction for customer
        Request body example: {
                                "id": 30,
