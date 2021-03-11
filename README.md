@@ -1,5 +1,5 @@
 # Read Me First
- LoyaltyPoints Project
+ LoyaltyPoints Service Project
 
 
 
