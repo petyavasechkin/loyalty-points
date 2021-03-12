@@ -166,13 +166,16 @@ public class DefaultLoyaltyService implements LoyaltyService {
                 return;
             }
 
-            LocalDateTime startWeekDateTime = currentDate.minusDays(6).atStartOfDay();
-            List<TransactionEntity> transactionEntities =
-                    transactionRepository.getAllByCustomerIdAndDateTimeAfter(transaction.getCustomerId(), startWeekDateTime);
+            List<TransactionEntity> transactionEntities = getLastWeekTransactions(transaction, currentDate);
             if (checkForEachDayOfWeekTransaction(transactionEntities)) {
                 accruingPoints(customerLoyalEntity, currentDate);
             }
         }
+    }
+    
+    private List<TransactionEntity> getLastWeekTransactions(Transaction transaction, LocalDate currentDate) {
+        LocalDateTime startWeekDateTime = currentDate.minusDays(6).atStartOfDay();
+        return transactionRepository.getAllByCustomerIdAndDateTimeAfter(transaction.getCustomerId(), startWeekDateTime);
     }
     
     private void accruingPoints(CustomerLoyalEntity customerLoyalEntity, LocalDate currentDate) {
