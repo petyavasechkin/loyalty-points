@@ -170,14 +170,18 @@ public class DefaultLoyaltyService implements LoyaltyService {
             List<TransactionEntity> transactionEntities =
                     transactionRepository.getAllByCustomerIdAndDateTimeAfter(transaction.getCustomerId(), startWeekDateTime);
             if (checkForEachDayOfWeekTransaction(transactionEntities)) {
-                int currentPoints = customerLoyalEntity.getPendingPoints();
-                LOGGER.debug("Accrued point {} for customer with Id:{}", currentPoints, customerLoyalEntity.getCustomerId());
-                customerLoyalEntity.setAvailablePoints(customerLoyalEntity.getAvailablePoints() + customerLoyalEntity.getPendingPoints());
-                customerLoyalEntity.setPendingPoints(0);
-                customerLoyalEntity.setAllAccruedPoints(customerLoyalEntity.getAllAccruedPoints() + currentPoints);
-                customerLoyalEntity.setLastAccruedDate(currentDate);
+                accruingPoints(customerLoyalEntity, currentDate);
             }
         }
+    }
+    
+    private void accruingPoints(CustomerLoyalEntity customerLoyalEntity, LocalDate currentDate) {
+        int currentPoints = customerLoyalEntity.getPendingPoints();
+        LOGGER.debug("Accrued point {} for customer with Id:{}", currentPoints, customerLoyalEntity.getCustomerId());
+        customerLoyalEntity.setAvailablePoints(customerLoyalEntity.getAvailablePoints() + customerLoyalEntity.getPendingPoints());
+        customerLoyalEntity.setPendingPoints(0);
+        customerLoyalEntity.setAllAccruedPoints(customerLoyalEntity.getAllAccruedPoints() + currentPoints);
+        customerLoyalEntity.setLastAccruedDate(currentDate);
     }
 
     private boolean checkForEachDayOfWeekTransaction(List<TransactionEntity> transactionEntities) {
