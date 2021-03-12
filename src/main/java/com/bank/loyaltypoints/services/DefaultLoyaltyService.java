@@ -103,11 +103,12 @@ public class DefaultLoyaltyService implements LoyaltyService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public LoyaltyPoints getLoyalty(Long customerId) {
         CustomerLoyalEntity customerLoyalEntity =
                 customerLoyalRepository.findById(customerId)
                         .orElseThrow(() -> new NoSuchCustomerException(CUSTOMER_NOT_EXISTS));
+        clearExpiredPoints(customerLoyalEntity, LocalDateTime.now());
         return new LoyaltyPoints(customerLoyalEntity.getAvailablePoints(),
                 customerLoyalEntity.getPendingPoints());
     }
@@ -118,6 +119,7 @@ public class DefaultLoyaltyService implements LoyaltyService {
         CustomerLoyalEntity customerLoyalEntity =
                 customerLoyalRepository.findById(customerId)
                         .orElseThrow(() -> new NoSuchCustomerException(CUSTOMER_NOT_EXISTS));
+        clearExpiredPoints(customerLoyalEntity, LocalDateTime.now());
         int cents = Utility.getCentsFromAmountStr(amount);
         if (customerLoyalEntity.getAvailablePoints() < cents) {
             throw new NotEnoughAvailablePointsException(NOT_ENOUGH_POINTS);
