@@ -91,7 +91,7 @@ class UtilityTest {
     @Test
     void isCurrentWeekDateTest3() {
         LocalDate date = LocalDate.now().minusDays(1);
-        if(date.getDayOfWeek().equals(DayOfWeek.MONDAY)) {
+        if(LocalDate.now().getDayOfWeek().equals(DayOfWeek.MONDAY)) {
             date = date.plusDays(2);
         }
 
@@ -103,7 +103,7 @@ class UtilityTest {
     @Test
     void isCurrentWeekDateTest4() {
         LocalDate date = LocalDate.now().plusDays(1);
-        if(date.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+        if(LocalDate.now().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
             date = date.minusDays(2);
         }
 
